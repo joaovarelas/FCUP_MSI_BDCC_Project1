@@ -1,0 +1,14 @@
+GET /rest/patients HTTP/2.0
+Host: localhost:8080
+
+
+######
+
+POST /rest/patients HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+{"gender":"M", "dob":"1997-01-15"}
+
+
+#####

@@ -1,0 +1,20 @@
+runtime: python312
+app_engine_apis: true
+
+entrypoint: gunicorn -b :$PORT main:app 
+handlers:
+  - url: /.*
+    script: auto
+
+
+env_variables:
+  APP_RUNNING_ENV: PROD 
+  DB_USER: root
+  DB_PASS: XXXXXXXXXXXXXX # use google secrets manager to avoid exposing pwd here
+  DB_NAME: hospital_db
+  CLOUD_SQL_CONNECTION_NAME: bdcc2025-451416:europe-west1:bdcc-proj1-mysql
+
+
+# connect to Cloud SQL using private ip - VPC Serverless
+vpc_access_connector:
+ name: projects/bdcc2025-451416/locations/europe-west1/connectors/app-sql-connector-1
