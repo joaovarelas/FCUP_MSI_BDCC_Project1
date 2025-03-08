@@ -1,10 +1,10 @@
-GET /rest/patients HTTP/2.0
+GET /rest/patient HTTP/2.0
 Host: localhost:8080
 
 
 ######
 
-POST /rest/patients HTTP/2.0
+POST /rest/patient HTTP/2.0
 Host: localhost:8080
 Content-Type: application/json
 
@@ -12,3 +12,70 @@ Content-Type: application/json
 
 
 #####
+
+DELETE /rest/patient/21 HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+
+
+######
+
+PUT /rest/patient/2 HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+{"gender":"F", "dob":"1337-12-12 00:00:00"}
+
+
+
+
+
+##############################
+
+
+
+
+
+
+GET /rest/admission HTTP/2.0
+Host: localhost:8080
+
+
+####
+
+POST /rest/admission HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "patient_id": 10,
+  "doctor_id": 5,
+  "admission_type": "Emergency",
+  "diagnosis": "Fracture",
+  "admit_time": "2025-03-07 08:30:00",  # Optional, if not provided it uses the current timestamp
+  "discharge_time": "2025-03-10 12:00:00"  # Optional
+}
+
+
+####
+
+DELETE /rest/admission/3 HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+
+####
+
+
+PUT /rest/admission/5 HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "patient_id": 12, 
+  "doctor_id": 7, 
+  "admission_type": "Routine", 
+  "diagnosis": "Cold",
+  "discharge_time": "2025-03-08 10:30:00"
+}

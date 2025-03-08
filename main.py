@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
-from routes import patients
+from routes import patient_route, admission_route, question_route
 
 app = Flask(__name__)
 
 # init routes flask REST API
-app.register_blueprint(patients.patients_api)
+app.register_blueprint(patient_route.patient_api)
+app.register_blueprint(admission_route.admission_api)
+app.register_blueprint(question_route.question_api)
 
 
 @app.route('/')
