@@ -38,14 +38,14 @@ def create_admission_route():
 
         # Extract required data for creating an admission
         patient_id = data.get('patient_id')
-        doctor_id = data.get('doctor_id')
+        #doctor_id = data.get('doctor_id')
         admission_type = data.get('admission_type')
         diagnosis = data.get('diagnosis')
         admit_time = data.get('admit_time')  # Optional
         discharge_time = data.get('discharge_time')  # Optional
 
         # Call the service to add an admission
-        result = admission_svc.add_admission(patient_id, doctor_id, admission_type, diagnosis, admit_time, discharge_time)
+        result = admission_svc.add_admission(patient_id, admission_type, diagnosis, admit_time, discharge_time)
         return result
     except Exception as err:
         return jsonify({"error": str(err)}), 500

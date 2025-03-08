@@ -13,6 +13,10 @@ def connect_to_db():
         charset='utf8mb4'
     )
 
+
+TOTAL_DOCTORS = 50
+NUM_BATCH = 50000
+
 # Function to insert doctors into the database
 def insert_doctors():
     print("Loading DOCTORS data...")
@@ -28,14 +32,14 @@ def insert_doctors():
         """
 
         # Insert 10 doctors with names like 'Doctor #01', 'Doctor #02', etc.
-        for i in range(1, 11):
-            doctor_name = f"Doctor #{i:02d}"
+        for i in range(1, TOTAL_DOCTORS):
+            doctor_name = f"The Doctor #{i:02d}"
             cursor.execute(insert_query, (doctor_name,))
 
         # Commit the transaction
         connection.commit()
 
-        print("Successfully inserted 10 doctors into the 'doctors' table.")
+        print(f"Successfully inserted {TOTAL_DOCTORS} doctors into the 'doctors' table.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -61,11 +65,13 @@ def load_patients_data(csv_file_path):
         VALUES (%s, %s, %s, %s)
     """
 
+    insert_data = []
+    
     try:
         with open(csv_file_path, mode='r') as file:
-            reader = csv.DictReader(file)
+            csv_reader = csv.DictReader(file)
 
-            for row in reader:
+            for index, row in enumerate(csv_reader):
                 patient_id = row['SUBJECT_ID']
                 gender = row['GENDER']
                 dob = row['DOB']
@@ -79,8 +85,22 @@ def load_patients_data(csv_file_path):
                     print(f"Skipping invalid date format: {e} for row: {row}")
                     continue
 
+
+                insert_data.append((patient_id, gender, dob, dod))
+
                 # Insert the patient data into the database
-                cursor.execute(insert_query, (patient_id, gender, dob, dod))
+                #cursor.execute(insert_query, (patient_id, gender, dob, dod))
+
+                if index % NUM_BATCH == 0 and insert_data:
+                    cursor.executemany(insert_query, insert_data)
+                    connection.commit()
+                    print(f"-> Loaded {index} rows...")
+                    insert_data = []  # Clear the batch list
+
+            # Insert remaining rows
+            if insert_data:
+                cursor.executemany(insert_query, insert_data)
+                connection.commit()
 
         # Commit the transaction to the database
         connection.commit()
@@ -105,41 +125,64 @@ def load_admissions_to_db(csv_file):
     connection = connect_to_db()    
     cursor = connection.cursor()
 
-    # Read the CSV file using pandas
-    # Prepare the SQL insert statement
+    # SQL insert statement
     insert_query = '''
-    INSERT INTO admissions (patient_id, doctor_id, admit_time, discharge_time, admission_type, diagnosis)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    INSERT INTO admissions (
+        hadm_id, patient_id, admit_time, discharge_time, death_time, 
+        admission_type, admission_location, discharge_location, insurance, 
+        language, religion, marital_status, ethnicity, ed_reg_time, ed_out_time, 
+        diagnosis, hospital_expire_flag, has_chartevents_data
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     '''
 
-    # Open and read the CSV file using csv.reader
-    with open(csv_file, mode='r') as file:
+    insert_data = []
+
+    # Open and read the CSV file
+    with open(csv_file, mode='r', encoding='utf-8') as file:
         csv_reader = csv.DictReader(file)
-        
+
         # Iterate through each row in the CSV
         for index, row in enumerate(csv_reader):
-            patient_id = row['SUBJECT_ID']
-            doctor_id = random.randint(1, 10)  # Randomly select a doctor_id between 1 and 10
-            admit_time = row['ADMITTIME']
-            discharge_time = row['DISCHTIME'] if row['DISCHTIME'] else None
+            hadm_id = int(row['HADM_ID'])
+            patient_id = int(row['SUBJECT_ID'])
+            admit_time = datetime.strptime(row['ADMITTIME'], '%Y-%m-%d %H:%M:%S')
+            discharge_time = datetime.strptime(row['DISCHTIME'], '%Y-%m-%d %H:%M:%S') if row['DISCHTIME'] else None
+            death_time = datetime.strptime(row['DEATHTIME'], '%Y-%m-%d %H:%M:%S') if row['DEATHTIME'] else None
             admission_type = row['ADMISSION_TYPE']
+            admission_location = row['ADMISSION_LOCATION']
+            discharge_location = row['DISCHARGE_LOCATION']
+            insurance = row['INSURANCE']
+            language = row['LANGUAGE'] if row['LANGUAGE'] else None
+            religion = row['RELIGION'] if row['RELIGION'] else None
+            marital_status = row['MARITAL_STATUS'] if row['MARITAL_STATUS'] else None
+            ethnicity = row['ETHNICITY']
+            edreg_time = datetime.strptime(row['EDREGTIME'], '%Y-%m-%d %H:%M:%S') if row['EDREGTIME'] else None
+            edout_time = datetime.strptime(row['EDOUTTIME'], '%Y-%m-%d %H:%M:%S') if row['EDOUTTIME'] else None
             diagnosis = row['DIAGNOSIS']
+            hospital_expire_flag = int(row['HOSPITAL_EXPIRE_FLAG'])
+            has_chartevents_data = int(row['HAS_CHARTEVENTS_DATA'])
 
-            # Convert admit_time and discharge_time to datetime format if necessary
-            admit_time = datetime.strptime(admit_time, '%Y-%m-%d %H:%M:%S')
-            discharge_time = datetime.strptime(discharge_time, '%Y-%m-%d %H:%M:%S') if discharge_time else None
+            # Append row data to batch insert list
+            insert_data.append((
+                hadm_id, patient_id, admit_time, discharge_time, death_time,
+                admission_type, admission_location, discharge_location, insurance,
+                language, religion, marital_status, ethnicity, edreg_time, edout_time,
+                diagnosis, hospital_expire_flag, has_chartevents_data
+            ))
 
-            # Execute the insert query
-            cursor.execute(insert_query, (patient_id, doctor_id, admit_time, discharge_time, admission_type, diagnosis))
-            
-            # Commit the transaction every 1000 rows
-            if index % 1000 == 0:
+            # Execute batch insert every NUM_BATCH rows
+            if index % NUM_BATCH == 0 and insert_data:
+                cursor.executemany(insert_query, insert_data)
                 connection.commit()
+                print(f"-> Loaded {index} rows...")
+                insert_data = []  # Clear batch list
 
-    # Commit any remaining rows
-    connection.commit()
+        # Insert any remaining rows
+        if insert_data:
+            cursor.executemany(insert_query, insert_data)
+            connection.commit()
 
-    # Close the cursor and the connection
+    # Close the cursor and connection
     cursor.close()
     connection.close()
 
@@ -147,6 +190,136 @@ def load_admissions_to_db(csv_file):
 
 
 
+# Function to load INPUTEVENTS_MV.csv into inputevents table
+def load_inputevents_data(csv_file_path):
+    print("Loading INPUTEVENTS_MV data...")
+
+    connection = connect_to_db()
+    cursor = connection.cursor()
+
+    insert_query = """
+        INSERT INTO inputevents (patient_id, hadm_id, start_time, end_time, item_id, amount, amount_uom, rate, rate_uom, order_category, order_description)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    insert_data = []
+
+    try:
+        with open(csv_file_path, mode='r') as file:
+            csv_reader = csv.DictReader(file)
+
+            for index, row in enumerate(csv_reader):
+                patient_id = row['SUBJECT_ID']
+                hadm_id = row['HADM_ID']
+                start_time = row['STARTTIME']
+                end_time = row['ENDTIME'] if row['ENDTIME'] else None
+                item_id = row['ITEMID']
+                amount = float(row['AMOUNT']) if row['AMOUNT'] else None
+                amount_uom = row['AMOUNTUOM']
+                rate = float(row['RATE']) if row['RATE'] else None
+                rate_uom = row['RATEUOM']
+                order_category = row['ORDERCATEGORYNAME']
+                order_description = row['ORDERCATEGORYDESCRIPTION']
+
+                # Convert date formats
+                try:
+                    start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+                    end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S') if end_time else None
+                except ValueError as e:
+                    print(f"Skipping invalid date format: {e} for row: {row}")
+                    continue
+
+                #cursor.execute(insert_query, (patient_id, hadm_id, start_time, end_time, item_id, amount, amount_uom, rate, rate_uom, order_category, order_description))
+
+                insert_data.append((patient_id, hadm_id, start_time, end_time, item_id, amount, amount_uom, rate, rate_uom, order_category, order_description))
+
+
+                # Commit after every 1000 rows
+                if index % NUM_BATCH == 0 and insert_data:
+                    cursor.executemany(insert_query, insert_data)
+                    connection.commit()
+                    print(f"-> Loaded {index} rows...")
+                    insert_data = []  # Clear the batch list
+
+            # Insert remaining rows
+            if insert_data:
+                cursor.executemany(insert_query, insert_data)
+                connection.commit()
+
+
+        connection.commit()
+        print("INPUTEVENTS_MV data loaded successfully!")
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    finally:
+        cursor.close()
+        connection.close()
+
+
+# Function to load LABEVENTS.csv into labevents table
+def load_labevents_data(csv_file_path):
+    print("Loading LABEVENTS data...")
+
+    connection = connect_to_db()
+    cursor = connection.cursor()
+
+    insert_query = """
+        INSERT INTO labevents (patient_id, hadm_id, item_id, test_time, test_value, test_value_num, test_unit, test_flag)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    insert_data= []
+
+    try:
+        with open(csv_file_path, mode='r') as file:
+            csv_reader = csv.DictReader(file)
+
+            for index, row in enumerate(csv_reader):
+                patient_id = row['SUBJECT_ID']
+                hadm_id = row['HADM_ID'] if row['HADM_ID'] else None
+                item_id = row['ITEMID']  if row['ITEMID'] else None
+                test_time = row['CHARTTIME']  if row['CHARTTIME'] else None
+                test_value = row['VALUE'] if row['VALUE'] else None
+                test_value_num = float(row['VALUENUM']) if row['VALUENUM'] else None
+                test_unit = row['VALUEUOM'] if row['VALUEUOM'] else None
+                test_flag = row['FLAG'] if row['FLAG'] else None
+
+                # Convert date format
+                try:
+                    test_time = datetime.strptime(test_time, '%Y-%m-%d %H:%M:%S')
+                except ValueError as e:
+                    print(f"Skipping invalid date format: {e} for row: {row}")
+                    continue
+
+                #cursor.execute(insert_query, (patient_id, hadm_id, item_id, test_time, test_value, test_value_num, test_unit, test_flag))
+                insert_data.append((patient_id, hadm_id, item_id, test_time, test_value, test_value_num, test_unit, test_flag))
+                 # Commit after every 1000 rows
+                if index % NUM_BATCH == 0 and insert_data:
+                    cursor.executemany(insert_query, insert_data)
+                    connection.commit()
+                    print(f"-> Loaded {index} rows...")
+                    insert_data = []  # Clear the batch list
+
+            # Insert remaining rows
+            if insert_data:
+                cursor.executemany(insert_query, insert_data)
+                connection.commit()
+
+        connection.commit()
+        print("LABEVENTS data loaded successfully!")
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    finally:
+        cursor.close()
+        connection.close()
+
+
+
+#######
 
 
 def MAIN():
@@ -154,6 +327,8 @@ def MAIN():
     insert_doctors()
     load_patients_data('./csv/PATIENTS.csv')
     load_admissions_to_db('./csv/ADMISSIONS.csv')
+    # load_inputevents_data("./csv/INPUTEVENTS_MV.csv")
+    load_labevents_data("./csv/LABEVENTS.csv")
 
 
 
