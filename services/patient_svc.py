@@ -2,32 +2,31 @@ from flask import Flask, Blueprint, jsonify, request
 from connectors import db
 
 
-def get_patients():
-
-    result = list()
+def get_patients(limit=50):
+    result = []
 
     try:
         connection = db.connect_to_mysql()
         cursor = connection.cursor()
 
-        cursor.execute("SELECT * FROM patients")
+        cursor.execute("SELECT * FROM patients LIMIT %s", (limit,))
         rows = cursor.fetchall()
 
         for row in rows:
-            #print(row)
-            result.append(row)
-            if len(result) > 50: # limit to top 50 rows
-                break
+            result.append({
+                "patient_id": row[0],
+                "gender": row[1],
+                "date_of_birth": row[2].strftime("%Y-%m-%d %H:%M:%S") if row[2] else None,
+                "date_of_death": row[3].strftime("%Y-%m-%d %H:%M:%S") if row[3] else None
+            })
 
     except Exception as e:
-        return jsonify(error=str(err)), 500
+        raise Exception(str(e))
     finally:
         cursor.close()
         connection.close()
 
-
-    return result
-
+    return jsonify(result)
 
 
 def add_patient(gender, dob):
@@ -43,12 +42,15 @@ def add_patient(gender, dob):
         cursor.execute(insert_query, (gender, dob))
         connection.commit()
 
+        new_patient_id = cursor.lastrowid  # Get the last inserted ID
+
     except Exception as err:
-        return jsonify(error=str(err)), 500
+        raise Exception(str(err))
     finally:
         cursor.close()
         connection.close()
 
+    return new_patient_id
 
 
 def delete_patient(patient_id):
@@ -66,7 +68,10 @@ def delete_patient(patient_id):
             return jsonify(error="Patient not found"), 404
         
         connection.commit()
-        return jsonify(message="Patient deleted successfully"), 200
+
+        return jsonify({
+            "message": "Patient deleted successfully",
+            "patient_id": patient_id}), 200
 
     except Exception as err:
         return jsonify(error=str(err)), 500
@@ -108,10 +113,12 @@ def update_patient(patient_id, gender=None, dob=None, dod=None):
         cursor.execute(update_query, tuple(values))
         
         if cursor.rowcount == 0:
-            return jsonify(error="Patient not found"), 404
+            return jsonify(error="Patient not found or not updated"), 404
 
         connection.commit()
-        return jsonify(message="Patient updated successfully"), 200
+        return jsonify({
+            "message": "Patient updated successfully",
+            "patient_id": patient_id}), 200
 
     except Exception as err:
         return jsonify(error=str(err)), 500

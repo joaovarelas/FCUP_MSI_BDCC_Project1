@@ -15,7 +15,7 @@ def connect_to_db():
 
 
 TOTAL_DOCTORS = 50
-NUM_BATCH = 50000
+NUM_BATCH = 5000
 
 # Function to insert doctors into the database
 def insert_doctors():
@@ -327,7 +327,7 @@ def MAIN():
     insert_doctors()
     load_patients_data('./csv/PATIENTS.csv')
     load_admissions_to_db('./csv/ADMISSIONS.csv')
-    # load_inputevents_data("./csv/INPUTEVENTS_MV.csv")
+    load_inputevents_data("./csv/INPUTEVENTS_MV.csv")
     load_labevents_data("./csv/LABEVENTS.csv")
 
 

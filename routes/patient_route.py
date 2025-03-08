@@ -8,18 +8,16 @@ patient_api = Blueprint('patient', __name__)
 @patient_api.route('/rest/patient', methods=['GET'])
 def list_patients_route():
     try:
-        list_of_patients = patient_svc.get_patients()
-        return jsonify(patients=list_of_patients)
+        result = patient_svc.get_patients()
+        return jsonify(result), 200
     except Exception as err:
-        return jsonify({"error":str(err)})
+        return jsonify(error=str(err)), 500
 
 
 
 @patient_api.route('/rest/patient', methods=['POST'])
 def create_patient_route():
-
     try: 
-        # Check if the request body is JSON
         if not request.is_json:
             return jsonify(error="Request must be in JSON format"), 400
         
@@ -30,17 +28,16 @@ def create_patient_route():
         if gender not in ['M', 'F']:
             return jsonify(error="Invalid gender. Must be 'M' or 'F'."), 400
 
-        dob = datetime.strptime(dob, '%Y-%m-%d')  # Ensure the format is YYYY-MM-DD
-    except ValueError:
-        return jsonify(error="Invalid date of birth format. Use YYYY-MM-DD."), 400
 
-    try:
-        patient_svc.add_patient(gender, dob) 
-        return jsonify(message="Patient created successfully")
+        dob = datetime.strptime(dob, '%Y-%m-%d')  # Ensure the format is YYYY-MM-DD
+
+        new_patient_id = patient_svc.add_patient(gender, dob) 
+        return jsonify({
+            "message": "Patient created successfully",
+            "patient_id": new_patient_id}), 200  # Return new patient ID
 
     except Exception as err:
-        return jsonify({"error":str(err)})
-
+        return jsonify(error=str(err)), 500
 
 
 

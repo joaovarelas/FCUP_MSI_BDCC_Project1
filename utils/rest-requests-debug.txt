@@ -1,3 +1,13 @@
+GET / HTTP/2.0
+Host: localhost:8080
+
+
+
+######
+
+
+
+
 GET /rest/patient HTTP/2.0
 Host: localhost:8080
 
@@ -13,7 +23,7 @@ Content-Type: application/json
 
 #####
 
-DELETE /rest/patient/21 HTTP/2.0
+DELETE /rest/patient/100010 HTTP/2.0
 Host: localhost:8080
 Content-Type: application/json
 
@@ -21,7 +31,7 @@ Content-Type: application/json
 
 ######
 
-PUT /rest/patient/2 HTTP/2.0
+PUT /rest/patient/6 HTTP/2.0
 Host: localhost:8080
 Content-Type: application/json
 
@@ -49,7 +59,7 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "patient_id": 10,
+  "patient_id": 11,
   "doctor_id": 5,
   "admission_type": "Emergency",
   "diagnosis": "Fracture",
