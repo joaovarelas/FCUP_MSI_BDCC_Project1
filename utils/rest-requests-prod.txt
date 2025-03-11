@@ -1,29 +1,26 @@
 GET / HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 
 
 
 ############### PATIENTS API #####################
 
 
-
-
-
 GET /rest/patient HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 
 
 ######
 
-GET /rest/patient/100030 HTTP/2.0
-Host: localhost:8080
+GET /rest/patient/10000 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
 
 
 ######
 
 
 POST /rest/patient HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
 {"gender":"M", "dob":"1997-01-15"}
@@ -31,19 +28,19 @@ Content-Type: application/json
 
 #####
 
-DELETE /rest/patient/1000 HTTP/2.0
-Host: localhost:8080
+DELETE /rest/patient/100001 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
 
 
 ######
 
-PUT /rest/patient/100030 HTTP/2.0
-Host: localhost:8080
+PUT /rest/patient/10000 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
-{"gender":"m", "date_of_birth":"1337-12-12 00:00:00","date_of_death":"2099-12-12 00:00:00"}
+{"gender":"F", "date_of_birth":"1337-12-12 00:00:00","date_of_death":"2099-12-12 00:00:00"}
 
 
 
@@ -56,21 +53,22 @@ Content-Type: application/json
 
 
 
+
 GET /rest/admission HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 
 
 
 ####
 
-GET /rest/admission/200013 HTTP/2.0
-Host: localhost:8080
+GET /rest/admission/100020 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
 
 
 ####
 
 POST /rest/admission HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
 {
@@ -96,7 +94,7 @@ Content-Type: application/json
 ####
 
 DELETE /rest/admission/31 HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
 
@@ -104,7 +102,7 @@ Content-Type: application/json
 
 
 PUT /rest/admission/200013 HTTP/2.0
-Host: localhost:8080
+Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
 {
@@ -125,3 +123,6 @@ Content-Type: application/json
   "hospital_expire_flag": 0,
   "has_chartevents_data": 1
 }
+
+
+

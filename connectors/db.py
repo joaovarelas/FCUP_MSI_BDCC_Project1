@@ -22,25 +22,29 @@ else:
 def connect_to_mysql():
     connection = None
 
-    # PROD ENV - GOOGLE CLOUD CONNECTOR 
-    if is_prod:
-        connection = connector.connect(
-            cloud_sql_connection_name,  # Cloud SQL connection name
-            "pymysql",                  # Using pymysql for MySQL
-            user=db_user,               # Database username
-            password=db_pass,           # Database password
-            db=db_name,                  # Database name
-            ip_type=IPTypes.PRIVATE     # PRIVATE IP, CONNECT THRU VPC SERVERLESS ACCESS
-        )
+    try:
+        # PROD ENV - GOOGLE CLOUD CONNECTOR 
+        if is_prod:
+            connection = connector.connect(
+                cloud_sql_connection_name,  # Cloud SQL connection name
+                "pymysql",                  # Using pymysql for MySQL
+                user=db_user,               # Database username
+                password=db_pass,           # Database password
+                db=db_name,                  # Database name
+                ip_type=IPTypes.PRIVATE     # PRIVATE IP, CONNECT THRU VPC SERVERLESS ACCESS
+            )
 
-    # DEV ENV
-    else:
-        connection = pymysql.connect(
-            host=db_host,
-            user=db_user,
-            password=db_pass,
-            db=db_name
-        )
+        # DEV ENV
+        else:
+            connection = pymysql.connect(
+                host=db_host,
+                user=db_user,
+                password=db_pass,
+                db=db_name
+            )
+
+    except Exception as err:
+        raise Exception(err)
 
     return connection
 

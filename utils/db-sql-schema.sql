@@ -1,4 +1,4 @@
-USE hospital_db;
+-- USE hospital_db;
 
 -- Disable foreign key checks temporarily
 SET foreign_key_checks = 0;
@@ -9,7 +9,6 @@ CREATE DATABASE hospital_db;
 
 -- Use the newly created database
 USE hospital_db;
-
 SET foreign_key_checks = 1;
 
 
@@ -112,12 +111,11 @@ CREATE TABLE IF NOT EXISTS questions (
 );
 
 
-/*
 
+/*
 paciente doente entra no hospital
 fica em fila de espera para ser atendido
 e atendido por um medico (doctor que lhe fica atribuido), faz diagnostico
 passa por N tratamentos (eventos) ...
 e dada alta (discharge time) e sai do hospital
-
 */

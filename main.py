@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from routes import patient_route, admission_route, question_route
+from routes import patient_route, admission_route, question_route, media_route
 
 app = Flask(__name__)
 
@@ -7,6 +7,8 @@ app = Flask(__name__)
 app.register_blueprint(patient_route.patient_api)
 app.register_blueprint(admission_route.admission_api)
 app.register_blueprint(question_route.question_api)
+app.register_blueprint(media_route.media_api)
+
 
 
 @app.route('/')

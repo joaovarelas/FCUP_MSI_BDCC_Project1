@@ -2,16 +2,53 @@ import pymysql
 import csv
 import random
 from datetime import datetime
+from google.cloud.sql.connector import Connector
+import os
 
-# Function to connect to the database
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/user/msi/bdcc/proj1-files/appeng-svcacc-key.json"
+
+
+# Environment Variables or Constants
+IS_PROD = True
+
+
+
+
+# Local Database Credentials
+LOCAL_DB_HOST = "localhost"
+LOCAL_DB_USER = "root"
+LOCAL_DB_PASS = "root"
+LOCAL_DB_NAME = "hospital_db"
+
+# Cloud SQL Credentials
+CLOUD_SQL_CONNECTION_NAME = "bdcc2025-451416:europe-west1:bdcc-proj1-mysql"
+CLOUD_DB_USER = "root"
+CLOUD_DB_PASS = "x%npoJsENm/5b8tz"
+CLOUD_DB_NAME = "hospital_db"
+
+# Function to connect to MySQL
 def connect_to_db():
-    return pymysql.connect(
-        host='localhost',
-        user='root',        # Your DB user
-        password='root',  # Your DB password
-        database='hospital_db',   # Your DB name
-        charset='utf8mb4'
-    )
+    if IS_PROD:
+        print(f"🔹 Connecting to Cloud SQL: {CLOUD_SQL_CONNECTION_NAME}")
+        connector = Connector()
+        connection = connector.connect(
+            CLOUD_SQL_CONNECTION_NAME,
+            "pymysql",
+            user=CLOUD_DB_USER,
+            password=CLOUD_DB_PASS,
+            db=CLOUD_DB_NAME,
+        )
+    else:
+        print(f"🔹 Connecting to Local DB: {LOCAL_DB_HOST}")
+        connection = pymysql.connect(
+            host=LOCAL_DB_HOST,
+            user=LOCAL_DB_USER,
+            password=LOCAL_DB_PASS,
+            database=LOCAL_DB_NAME,
+            charset="utf8mb4",
+        )
+    
+    return connection
 
 
 TOTAL_DOCTORS = 50
