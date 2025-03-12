@@ -13,8 +13,6 @@ SET foreign_key_checks = 1;
 
 
 
-
-
 -- Create a table for users (doctors and staff)
 CREATE TABLE IF NOT EXISTS doctors (
     doctor_id INT AUTO_INCREMENT PRIMARY KEY,

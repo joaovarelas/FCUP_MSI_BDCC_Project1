@@ -125,3 +125,14 @@ Content-Type: application/json
   "hospital_expire_flag": 0,
   "has_chartevents_data": 1
 }
+
+
+
+
+###### MEDIA API ########
+
+GET /rest/media HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+
