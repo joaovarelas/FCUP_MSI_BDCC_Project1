@@ -14,10 +14,10 @@ SET foreign_key_checks = 1;
 
 
 -- Create a table for users (doctors and staff)
-CREATE TABLE IF NOT EXISTS doctors (
-    doctor_id INT AUTO_INCREMENT PRIMARY KEY,
-    doctor_name VARCHAR(100) NOT NULL
-);
+-- caregivers.csv 
+
+
+
 
 CREATE TABLE IF NOT EXISTS patients (
     patient_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -108,6 +108,14 @@ CREATE TABLE IF NOT EXISTS questions (
     FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id)
 );
 
+
+
+CREATE TABLE IF NOT EXISTS caregivers (
+    ROW_ID INT PRIMARY KEY,
+    CGID INT NOT NULL,
+    LABEL VARCHAR(50),
+    DESCRIPTION VARCHAR(255)
+);
 
 
 /*
