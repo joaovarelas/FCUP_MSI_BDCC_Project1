@@ -10,7 +10,7 @@ def get_times(limit=50):
         connection = db.connect_to_mysql()
         cursor = connection.cursor()
 
-        cursor.execute("SELECT i.hadm_id , a.patient_id, a.admit_time, i.intime FROM ADMISSIONS a inner join ICUSTAYS i on a.hadm_id=i.hadm_id LIMIT %s", (limit,))
+        cursor.execute("SELECT i.hadm_id , a.patient_id, a.admit_time, i.intime FROM ADMISSIONS a inner join ICUSTAYS i on a.hadm_id=i.hadm_id")
         data = cursor.fetchall()
 
 
@@ -33,6 +33,7 @@ def get_times(limit=50):
     finally:
         cursor.close()
         connection.close()
-
-    return jsonify(times=result), 200
+        result.sort(key=lambda x: x["waiting_time"], reverse=True)
+        final=result[0:limit]
+    return jsonify(times=final), 200
     
