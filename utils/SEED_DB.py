@@ -355,6 +355,61 @@ def load_labevents_data(csv_file_path):
         connection.close()
 
 
+# Function to load ICUSTAYS.csv into icustays table
+def load_icustays_data(csv_file_path):
+    print("Loading ICUSTAYS data...")
+    
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    
+    insert_query = """
+        INSERT INTO icustays (patient_id, hadm_id, icustay_id, intime, outtime)
+        VALUES (%s, %s, %s, %s, %s)
+    """
+    
+    insert_data = []
+    
+    try:
+        with open(csv_file_path, mode='r') as file:
+            csv_reader = csv.DictReader(file)
+            
+            for index, row in enumerate(csv_reader):
+                patient_id = row['SUBJECT_ID']
+                hadm_id = row['HADM_ID'] if row['HADM_ID'] else None
+                icustay_id = row['ICUSTAY_ID']
+                intime = row['INTIME'] if row['INTIME'] else None
+                outtime = row['OUTTIME'] if row['OUTTIME'] else None
+                
+                # Convert datetime format
+                try:
+                    intime = datetime.strptime(intime, '%Y-%m-%d %H:%M:%S') if intime else None
+                    outtime = datetime.strptime(outtime, '%Y-%m-%d %H:%M:%S') if outtime else None
+                except ValueError as e:
+                    print(f"Skipping invalid date format: {e} for row: {row}")
+                    continue
+                
+                insert_data.append((patient_id, hadm_id, icustay_id, intime, outtime))
+                
+                # Commit after every NUM_BATCH rows
+                if index % NUM_BATCH == 0 and insert_data:
+                    cursor.executemany(insert_query, insert_data)
+                    connection.commit()
+                    print(f"-> Loaded {index} rows...")
+                    insert_data = []  # Clear the batch list
+            
+            # Insert remaining rows
+            if insert_data:
+                cursor.executemany(insert_query, insert_data)
+                connection.commit()
+        
+        print("ICUSTAYS data loaded successfully!")
+    
+    except Exception as e:
+        print(f"Error: {e}")
+    
+    finally:
+        cursor.close()
+        connection.close()
 
 #######
 
@@ -366,6 +421,7 @@ def MAIN():
     load_admissions_to_db('./csv/ADMISSIONS.csv')
     load_inputevents_data("./csv/INPUTEVENTS_MV.csv")
     load_labevents_data("./csv/LABEVENTS.csv")
+    load_icustays_data("./csv/ICUSTAYS.csv")
 
 
 

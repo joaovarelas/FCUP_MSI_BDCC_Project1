@@ -109,20 +109,12 @@ CREATE TABLE IF NOT EXISTS questions (
 );
 
 
--- isto ainda nao esta correto, e provisorio
 CREATE TABLE IF NOT EXISTS icustays (
-    row_id INT AUTO_INCREMENT PRIMARY KEY,
-    subject_id INT NOT NULL,
+    patient_id INT NOT NULL,
     hadm_id INT NOT NULL,
-    icustay_id INT NOT NULL,
-    dbsource TEXT DEFAULT NULL,
-    first_careunit TEXT NOT NULL,
-    last_careunit TEXT NOT NULL,
-    first_wardid INT NOT NULL,
-    last_wardid INT NOT NULL,
+    icustay_id INT NOT NULL PRIMARY KEY,
     intime DATETIME NOT NULL,
     outtime DATETIME DEFAULT NULL,
-    los FLOAT DEFAULT NULL,
     FOREIGN KEY (subject_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
     FOREIGN KEY (hadm_id) REFERENCES admissions(hadm_id) ON DELETE CASCADE
 );
