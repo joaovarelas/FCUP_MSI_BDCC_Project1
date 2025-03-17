@@ -27,13 +27,15 @@ def get_times(limit=50):
                 "icu_entrance_time": row[3].strftime("%Y-%m-%d %H:%M:%S"),
                 "waiting_time": waiting_time
             })
+            
+        result.sort(key=lambda x: x["waiting_time"], reverse=True)
+        final=result[0:limit]
         
     except Exception as err:
         return jsonify(error=str(err)), 500    
     finally:
         cursor.close()
         connection.close()
-        result.sort(key=lambda x: x["waiting_time"], reverse=True)
-        final=result[0:limit]
+
     return jsonify(times=final), 200
     

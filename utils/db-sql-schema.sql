@@ -106,13 +106,11 @@ CREATE TABLE IF NOT EXISTS media (
 CREATE TABLE IF NOT EXISTS questions (
     question_id INT AUTO_INCREMENT PRIMARY KEY,
     patient_id INT NOT NULL,
-    caregiver_id INT NOT NULL,
     question TEXT NOT NULL,
     reply TEXT DEFAULT NULL,
     question_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     reply_date DATETIME DEFAULT NULL,
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
-    FOREIGN KEY (caregiver_id) REFERENCES caregivers(caregiver_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 );
 
 

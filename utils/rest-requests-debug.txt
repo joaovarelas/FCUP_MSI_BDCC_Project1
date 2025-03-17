@@ -15,7 +15,7 @@ Host: localhost:8080
 
 ######
 
-GET /rest/patient/100030 HTTP/2.0
+GET /rest/patient/2 HTTP/2.0
 Host: localhost:8080
 
 
@@ -146,3 +146,42 @@ Content-Type: application/json
 GET /rest/waitingtime HTTP/2.0
 Host: localhost:8080
 Content-Type: application/json
+
+
+
+
+
+
+############### QUESTIONS API #####################
+
+
+GET /rest/questions/27063 HTTP/2.0
+Host: localhost:8080
+
+
+
+#####
+
+
+
+POST /rest/questions/27063 HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+
+{ "question": "What is the patient's current condition??????" }
+
+
+
+
+######
+
+
+PUT /rest/questions/27063/question/4 HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json
+X-Doctor-ID: 16009
+
+{
+    "answer": "The patient's current condition is stable."
+}
+
