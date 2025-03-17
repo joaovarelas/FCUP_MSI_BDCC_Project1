@@ -136,3 +136,13 @@ Host: localhost:8080
 Content-Type: application/json
 
 
+
+
+
+
+###### WAITINGTIME API ########
+
+
+GET /rest/waitingtime HTTP/2.0
+Host: localhost:8080
+Content-Type: application/json

@@ -10,7 +10,7 @@ def get_times(limit=50):
         connection = db.connect_to_mysql()
         cursor = connection.cursor()
 
-        cursor.execute("SELECT i.hadm_id , a.patient_id, a.admit_time, i.intime FROM ADMISSIONS a inner join ICUSTAYS i on a.hadm_id=i.hadm_id")
+        cursor.execute("SELECT i.hadm_id , a.patient_id, a.admit_time, i.intime FROM admissions a inner join icustays i on a.hadm_id=i.hadm_id")
         data = cursor.fetchall()
 
 
@@ -24,7 +24,7 @@ def get_times(limit=50):
             result.append({
                 "patient_id": row[1],
                 "admission_time": row[2].strftime("%Y-%m-%d %H:%M:%S"),
-                "icu_entrence_time": row[3].strftime("%Y-%m-%d %H:%M:%S"),
+                "icu_entrance_time": row[3].strftime("%Y-%m-%d %H:%M:%S"),
                 "waiting_time": waiting_time
             })
         

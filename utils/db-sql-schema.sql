@@ -16,6 +16,11 @@ SET foreign_key_checks = 1;
 -- Create a table for users (doctors and staff)
 -- caregivers.csv 
 
+CREATE TABLE IF NOT EXISTS caregivers (
+    caregiver_id INT AUTO_INCREMENT PRIMARY KEY,
+    label VARCHAR(50),
+    description VARCHAR(255)
+);
 
 
 
@@ -58,6 +63,7 @@ CREATE TABLE IF NOT EXISTS inputevents (
     hadm_id INT NOT NULL,
     start_time DATETIME NOT NULL,
     end_time DATETIME NULL,
+    caregiver_id INT NOT NULL,
     item_id INT NOT NULL,
     amount FLOAT NULL,
     amount_uom VARCHAR(50) NULL,
@@ -66,7 +72,8 @@ CREATE TABLE IF NOT EXISTS inputevents (
     order_category VARCHAR(250) NULL,
     order_description VARCHAR(250) NULL,
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
-    FOREIGN KEY (hadm_id) REFERENCES admissions(hadm_id) ON DELETE CASCADE
+    FOREIGN KEY (hadm_id) REFERENCES admissions(hadm_id) ON DELETE CASCADE,
+    FOREIGN KEY (caregiver_id) REFERENCES caregivers(caregiver_id) ON DELETE CASCADE
 
 );
 
@@ -99,32 +106,26 @@ CREATE TABLE IF NOT EXISTS media (
 CREATE TABLE IF NOT EXISTS questions (
     question_id INT AUTO_INCREMENT PRIMARY KEY,
     patient_id INT NOT NULL,
-    CGID INT NOT NULL,
+    caregiver_id INT NOT NULL,
     question TEXT NOT NULL,
     reply TEXT DEFAULT NULL,
     question_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     reply_date DATETIME DEFAULT NULL,
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
-    FOREIGN KEY (CGID) REFERENCES caregivers(CGID)
+    FOREIGN KEY (caregiver_id) REFERENCES caregivers(caregiver_id)
 );
 
 
 CREATE TABLE IF NOT EXISTS icustays (
+    icustay_id INT NOT NULL PRIMARY KEY,
     patient_id INT NOT NULL,
     hadm_id INT NOT NULL,
-    icustay_id INT NOT NULL PRIMARY KEY,
     intime DATETIME NOT NULL,
     outtime DATETIME DEFAULT NULL,
-    FOREIGN KEY (subject_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
     FOREIGN KEY (hadm_id) REFERENCES admissions(hadm_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS caregivers (
-    ROW_ID INT PRIMARY KEY,
-    CGID INT NOT NULL,
-    LABEL VARCHAR(50),
-    DESCRIPTION VARCHAR(255)
-);
 
 
 
