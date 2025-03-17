@@ -109,6 +109,15 @@ CREATE TABLE IF NOT EXISTS questions (
 );
 
 
+CREATE TABLE IF NOT EXISTS icustays (
+    patient_id INT NOT NULL,
+    hadm_id INT NOT NULL,
+    icustay_id INT NOT NULL PRIMARY KEY,
+    intime DATETIME NOT NULL,
+    outtime DATETIME DEFAULT NULL,
+    FOREIGN KEY (subject_id) REFERENCES patients(patient_id) ON DELETE CASCADE,
+    FOREIGN KEY (hadm_id) REFERENCES admissions(hadm_id) ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS caregivers (
     ROW_ID INT PRIMARY KEY,
