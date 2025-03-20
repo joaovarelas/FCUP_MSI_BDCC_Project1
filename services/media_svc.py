@@ -13,7 +13,7 @@ def get_media_by_patient(patient_id):
  
     try:
         connection = db.connect_to_mysql()
-        cursor = connection.cursor()  # Return results as dict
+        cursor = connection.cursor()  
 
         query = '''
         SELECT media_id, file_source, file_description, uploaded_at
@@ -33,7 +33,6 @@ def get_media_by_patient(patient_id):
 
     except Exception as e:
         return jsonify(error=str(e)), 500
-
 
 
 

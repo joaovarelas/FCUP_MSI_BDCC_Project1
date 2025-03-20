@@ -9,7 +9,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/user/msi/bdcc/proj1-files/
 
 
 # Environment Variables or Constants
-IS_PROD = False
+IS_PROD = True
 
 
 

@@ -1,3 +1,4 @@
+
 GET / HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 
@@ -6,13 +7,16 @@ Host: bdcc2025-451416.ew.r.appspot.com
 ############### PATIENTS API #####################
 
 
+
+
+
 GET /rest/patient HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 
 
 ######
 
-GET /rest/patient/10000 HTTP/2.0
+GET /rest/patient/2 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 
 
@@ -28,7 +32,7 @@ Content-Type: application/json
 
 #####
 
-DELETE /rest/patient/100001 HTTP/2.0
+DELETE /rest/patient/1000 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
@@ -36,18 +40,17 @@ Content-Type: application/json
 
 ######
 
-PUT /rest/patient/10000 HTTP/2.0
+PUT /rest/patient/100030 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
-{"gender":"F", "date_of_birth":"1337-12-12 00:00:00","date_of_death":"2099-12-12 00:00:00"}
+{"gender":"m", "date_of_birth":"1337-12-12 00:00:00","date_of_death":"2099-12-12 00:00:00"}
 
 
 
 
 
 ############### ADMISSION API #####################
-
 
 
 
@@ -61,7 +64,7 @@ Host: bdcc2025-451416.ew.r.appspot.com
 
 ####
 
-GET /rest/admission/100020 HTTP/2.0
+GET /rest/admission/200013 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 
 
@@ -126,3 +129,104 @@ Content-Type: application/json
 
 
 
+
+###### MEDIA API ########
+
+GET /rest/media HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+Content-Type: application/json
+
+
+
+
+
+
+###### WAITINGTIME API ########
+
+
+GET /rest/waitingtime HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+Content-Type: application/json
+
+
+
+
+
+
+############### QUESTIONS API #####################
+
+
+GET /rest/questions/27063 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+
+
+
+#####
+
+
+
+POST /rest/questions/27063 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+Content-Type: application/json
+
+{ "question": "What is the patient's current condition??????" }
+
+
+######
+
+
+PUT /rest/questions/27063/question/4 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+Content-Type: application/json
+X-Doctor-ID: 16009
+
+{
+    "answer": "The patient's current condition is stable."
+}
+
+
+
+
+############### MEDIA API #####################
+
+
+GET /rest/media/2 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+
+
+
+#######
+
+
+
+POST /rest/media/2 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="patient_report.jpg"
+Content-Type: image/jpeg
+
+FICHEIROTESTE12345
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+This is the file description1
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+#####
+
+
+GET /rest/media/uuid/db22285d-ffd0-44ed-b5a5-c71a1b4f0cab HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com
+
+
+
+
+
+############ FAAS API ##############
+
+
+GET /bdcc-get-times-faas HTTP/2.0
+Host: europe-west1-bdcc2025-451416.cloudfunctions.net
