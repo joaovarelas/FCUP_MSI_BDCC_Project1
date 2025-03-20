@@ -19,3 +19,10 @@ env_variables:
 vpc_access_connector:
   name: projects/bdcc2025-451416/locations/europe-west1/connectors/app-sql-connector-1
 
+automatic_scaling:
+  target_cpu_utilization: 0.65
+  min_instances: 1
+  max_instances: 5
+  min_pending_latency: 30ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 50

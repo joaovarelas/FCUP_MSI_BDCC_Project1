@@ -1,0 +1,152 @@
+config:
+  target: 'https://bdcc2025-451416.ew.r.appspot.com'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+    - duration: 60
+      arrivalRate: 20
+
+scenarios:
+  - flow:
+      - get:
+          url: "/"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - get:
+          url: "/rest/patient"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - get:
+          url: "/rest/patient/2"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - post:
+          url: "/rest/patient"
+          json:
+            gender: "M"
+            dob: "1997-01-15"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - delete:
+          url: "/rest/patient/1000"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - put:
+          url: "/rest/patient/100030"
+          json:
+            gender: "m"
+            date_of_birth: "1337-12-12 00:00:00"
+            date_of_death: "2099-12-12 00:00:00"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - get:
+          url: "/rest/admission"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - get:
+          url: "/rest/admission/200013"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - post:
+          url: "/rest/admission"
+          json:
+            patient_id: 11
+            admission_type: "Emergency"
+            diagnosis: "Fracture"
+            admit_time: "2025-03-07 08:30:00"
+            discharge_time: "2025-03-10 12:00:00"
+            admission_location: "Emergency Room"
+            discharge_location: "Ward"
+            insurance: "Private"
+            language: "English"
+            religion: "Christianity"
+            marital_status: "Single"
+            ethnicity: "Caucasian"
+            ed_reg_time: "2025-03-07 08:00:00"
+            ed_out_time: "2025-03-07 09:00:00"
+            hospital_expire_flag: 0
+            has_chartevents_data: 0
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - delete:
+          url: "/rest/admission/31"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - put:
+          url: "/rest/admission/200013"
+          json:
+            patient_id: 12
+            admission_type: "Routine"
+            diagnosis: "COLD"
+            discharge_time: "2026-03-08 10:30:00"
+            admit_time: "2025-03-01 08:00:00"
+            admission_location: "ER"
+            discharge_location: "Ward 5"
+            insurance: "Health Plan A"
+            language: "English"
+            religion: "Christian"
+            marital_status: "Single"
+            ethnicity: "Caucasian"
+            ed_reg_time: "2025-03-01 07:30:00"
+            ed_out_time: "2025-03-01 09:00:00"
+            hospital_expire_flag: 0
+            has_chartevents_data: 1
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - get:
+          url: "/rest/media"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - get:
+          url: "/rest/waitingtime"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - get:
+          url: "/rest/questions/27063"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - post:
+          url: "/rest/questions/27063"
+          json:
+            question: "What is the patient's current condition??????"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+      - put:
+          url: "/rest/questions/27063/question/4"
+          json:
+            answer: "The patient's current condition is stable."
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'application/json'
+            X-Doctor-ID: '16009'
+      - get:
+          url: "/rest/media/2"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - post:
+          url: "/rest/media/2"
+          formData:
+            file:
+              filePath: "./patient_report.jpg"
+              contentType: "image/jpeg"
+            description: "This is the file description1"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+            Content-Type: 'multipart/form-data'
+      - get:
+          url: "/rest/media/uuid/db22285d-ffd0-44ed-b5a5-c71a1b4f0cab"
+          headers:
+            Host: 'bdcc2025-451416.ew.r.appspot.com'
+      - get:
+          url: "/bdcc-get-times-faas"
+          headers:
+            Host: 'europe-west1-bdcc2025-451416.cloudfunctions.net'
