@@ -32,7 +32,7 @@ Content-Type: application/json
 
 #####
 
-DELETE /rest/patient/1000 HTTP/2.0
+DELETE /rest/patient/100001 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
@@ -64,7 +64,7 @@ Host: bdcc2025-451416.ew.r.appspot.com
 
 ####
 
-GET /rest/admission/200013 HTTP/2.0
+GET /rest/admission/200000 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 
 
@@ -96,7 +96,7 @@ Content-Type: application/json
 
 ####
 
-DELETE /rest/admission/31 HTTP/2.0
+DELETE /rest/admission/100001 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
@@ -104,7 +104,7 @@ Content-Type: application/json
 ####
 
 
-PUT /rest/admission/200013 HTTP/2.0
+PUT /rest/admission/200000 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 
@@ -175,7 +175,7 @@ Content-Type: application/json
 ######
 
 
-PUT /rest/questions/27063/question/4 HTTP/2.0
+PUT /rest/questions/27063/question/1 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 Content-Type: application/json
 X-Doctor-ID: 16009
@@ -218,7 +218,7 @@ This is the file description1
 #####
 
 
-GET /rest/media/uuid/db22285d-ffd0-44ed-b5a5-c71a1b4f0cab HTTP/2.0
+GET /rest/media/uuid/6afe5b47-ed7d-402c-9073-8e3b35779d76 HTTP/2.0
 Host: bdcc2025-451416.ew.r.appspot.com
 
 
@@ -230,3 +230,12 @@ Host: bdcc2025-451416.ew.r.appspot.com
 
 GET /bdcc-get-times-faas HTTP/2.0
 Host: europe-west1-bdcc2025-451416.cloudfunctions.net
+
+
+
+
+############### PROGRESS API #####################
+
+
+GET /rest/progress/27063 HTTP/2.0
+Host: bdcc2025-451416.ew.r.appspot.com

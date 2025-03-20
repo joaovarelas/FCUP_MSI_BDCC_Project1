@@ -1,5 +1,7 @@
 from flask import Flask, Blueprint, jsonify, request
 from connectors import db
+
+
 def get_admissions(limit=50):
     result = []
 
@@ -117,8 +119,8 @@ def add_admission(
 
         
         insert_data = (
-            patient_id, admission_type, diagnosis, admit_time, discharge_time, death_time, admission_location,
-            discharge_location, insurance, language, religion, marital_status, ethnicity, ed_reg_time,
+            patient_id, admission_type, diagnosis, admit_time, discharge_time, admission_location,
+            discharge_location, death_time, insurance, language, religion, marital_status, ethnicity, ed_reg_time,
             ed_out_time, hospital_expire_flag, has_chartevents_data
         )
 
@@ -218,12 +220,14 @@ def update_admission(hadm_id, patient_id=None,  admission_type=None, diagnosis=N
     finally:
         cursor.close()
         connection.close()
+        
+        
 def delete_admission(admission_id):
     try:
         connection = db.connect_to_mysql()
         cursor = connection.cursor()
 
-        delete_query = "DELETE FROM admissions WHERE admission_id = %s"
+        delete_query = "DELETE FROM admissions WHERE hadm_id = %s"
         cursor.execute(delete_query, (admission_id,))
 
         if cursor.rowcount == 0:

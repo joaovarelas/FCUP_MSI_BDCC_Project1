@@ -1,9 +1,11 @@
-from flask import Flask, Blueprint, jsonify, request
+from flask import Flask, Blueprint, jsonify, request, send_file
 from connectors import db
 from google.cloud import storage
 import uuid
 import datetime
 import os 
+import io
+
 
 #BUCKET_NAME = "bucket-patient-files"
 BUCKET_NAME = os.getenv("BUCKET_NAME")
@@ -37,7 +39,7 @@ def get_media_by_patient(patient_id):
 
 
 
-def generate_signed_url(file_uuid):
+def get_file_by_uuid(file_uuid):
 
     try:
         connection = db.connect_to_mysql()
@@ -62,15 +64,24 @@ def generate_signed_url(file_uuid):
         if not blob.exists():
             return jsonify(error="File not found in Cloud Storage"), 404
 
-        signed_url = blob.generate_signed_url(
-            expiration=datetime.timedelta(hours=1),
-            method="GET"
-        )
+        # signed_url = blob.generate_signed_url(
+        #     expiration=datetime.timedelta(hours=1),
+        #     method="GET"
+        # )
+        
+        file_data = blob.download_as_bytes()
 
-        return jsonify({
-            "file_uuid": file_uuid,
-            "signed_url": signed_url
-        }), 200
+        return send_file(
+            io.BytesIO(file_data),  # Convert the byte data to a file-like object
+            as_attachment=True,      # Make it downloadable as an attachment
+            download_name=file_uuid,  # You can specify the name of the downloaded file
+            mimetype='application/octet-stream'  # Or specify a specific MIME type if you know it
+        )
+  
+        # return jsonify({
+        #     "file_uuid": file_uuid,
+        #     "signed_url": signed_url
+        # }), 200
 
     except Exception as e:
         return jsonify(error=str(e)), 500

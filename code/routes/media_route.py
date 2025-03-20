@@ -23,7 +23,7 @@ def get_patient_media(patient_id):
 @media_api.route('/rest/media/uuid/<file_uuid>', methods=['GET'])
 def get_signed_url(file_uuid):
     try:
-        return media_svc.generate_signed_url(file_uuid)
+        return media_svc.get_file_by_uuid(file_uuid)
     except Exception as err:
         return jsonify(error=str(err)), 500
 
