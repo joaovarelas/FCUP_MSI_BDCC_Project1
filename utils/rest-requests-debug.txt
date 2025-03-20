@@ -223,3 +223,13 @@ Host: localhost:8080
 
 
 
+
+
+
+
+############### PROGRESS API #####################
+
+
+GET /rest/progress/27063 HTTP/2.0
+Host: localhost:8080
+
