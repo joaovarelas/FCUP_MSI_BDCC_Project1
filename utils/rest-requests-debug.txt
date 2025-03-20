@@ -171,8 +171,6 @@ Content-Type: application/json
 { "question": "What is the patient's current condition??????" }
 
 
-
-
 ######
 
 
@@ -185,3 +183,28 @@ X-Doctor-ID: 16009
     "answer": "The patient's current condition is stable."
 }
 
+
+
+
+############### MEDIA API #####################
+
+
+GET /rest/media/3 HTTP/2.0
+Host: localhost:8080
+
+
+
+#######
+
+
+
+POST /rest/media/2 HTTP/2.0
+Host: localhost:8080
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="patient_report.jpg"
+Content-Type: image/jpeg
+
+TESTE12345
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
