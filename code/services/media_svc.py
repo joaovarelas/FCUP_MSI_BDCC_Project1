@@ -6,9 +6,7 @@ import datetime
 import os 
 import io
 
-
-#BUCKET_NAME = "bucket-patient-files"
-BUCKET_NAME = os.getenv("BUCKET_NAME")
+from connectors.storage import BUCKET_NAME
 
 
 def get_media_by_patient(patient_id):
