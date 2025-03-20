@@ -10,9 +10,11 @@ handlers:
 env_variables:
   APP_RUNNING_ENV: PROD
   DB_USER: root
-  DB_PASS: x%npoJsENm/5b8tz  # Consider using Secret Manager instead of hardcoding
+  DB_PASS: x%npoJsENm/5b8tz 
   DB_NAME: hospital_db
   CLOUD_SQL_CONNECTION_NAME: bdcc2025-451416:europe-west1:bdcc-proj1-mysql
+  BUCKET_NAME: bucket-patient-files
+
 
 vpc_access_connector:
   name: projects/bdcc2025-451416/locations/europe-west1/connectors/app-sql-connector-1
