@@ -1,0 +1,16 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Evaluation}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+\subsection{Load Testing}
+The system's performance was evaluated using Artillery, a robust load-testing tool, to assess its scalability and responsiveness under heavy traffic. The tests simulated multiple concurrent users performing actions such as creating patient records, uploading media, and querying data. Key performance indicators, including response times, throughput, and error rates, were closely monitored.
+
+To ensure scalability, Google App Engine (GAE) was configured to automatically scale instances based on CPU usage and request volume. Cloud SQL was set up with read replicas and automatic storage expansion to handle increasing data loads.
+
+High availability was tested by deploying the system specifically on the europe-west1 region. Latency and failover behavior were measured to ensure consistent performance during potential regional disruptions.
+
+The system is expected to handle hundreds of requests per second, with sub-second response times under normal conditions.
+\end{multicols}

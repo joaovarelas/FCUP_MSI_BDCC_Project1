@@ -1,0 +1,20 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Implementation}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+
+Complementing the structured data stored in Cloud SQL, unstructured data such as images, videos, and documents linked to patients is managed via Google Cloud Storage. A dedicated bucket, specified through environment variables, serves as the repository for this media. The \texttt{media} Blueprint exposes endpoints for file operations, utilizing GCP client libraries for seamless integration. Upon upload, each file is assigned a universally unique identifier (UUID), ensuring distinct naming in Cloud Storage, and corresponding metadata is stored in Cloud SQL for reference and traceability.
+
+Across all routes, the system follows a standardized pattern for interacting with Cloud SQL. Secure connections are established based on the environment, SQL queries—often involving joins—are executed, and the results are processed in Python (e.g., calculating waiting times or formatting timestamps) before being returned as JSON responses. Connections and cursors are always closed properly to maintain efficiency. This robust pattern is also leveraged by Cloud Functions for asynchronous tasks, ensuring consistent, secure, and scalable data access while abstracting the complexity of storage operations from clients.
+
+In the implementation phase, we leveraged Google Cloud Functions to deploy a Function-as-a-Service (FaaS) solution, enabling us to handle HTTP requests to query data from our Cloud SQL instance in a scalable, serverless manner.  We created a function that establishes a private IP connection to the database hosted on Google Cloud, ensuring data remains within our VPC. This connection is used by the deployed function \textit{get times}, which is invoked via HTTP trigger. The deployment process uses the \textit{gcloud functions deploy} command with environment variables passed in for secure access, allowing us to manage database credentials and configuration dynamically. By using FaaS, we minimized infrastructure overhead while enabling responsive and cost-effective access to our backend database.
+
+
+Additionally, the raw dataset—originally in CSV format—was adapted and ingested into Cloud SQL through custom ETL scripts. These scripts handle data validation, type conversion, and batching, ensuring efficient and error-resilient loading of large datasets like patients, admissions, lab events, ICU stays, etc. Depending on the environment flag \textit{IS PROD}, connections are dynamically routed to either local or cloud databases. Throughout the process, we ensured data consistency by parsing datetime fields, managing nulls, and committing transactions in batches for optimal performance. This dual setup supports both local development and production deployment seamlessly.
+
+\end{multicols}
+
+

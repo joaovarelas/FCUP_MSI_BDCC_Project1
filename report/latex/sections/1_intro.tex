@@ -1,0 +1,10 @@
+\begin{multicols}{2}
+\tableofcontents
+\section{Introduction}
+The goal of this project is to explore how cloud computing services can be utilized to develop scalable, fast, and highly available backend systems. Specifically, we design and implement a backend service for a hospital management system, inspired by the MIMIC-III database. The system supports operations for managing patient data, medical admissions, progress reports, media files, and doctor-patient communication through questions and replies. All backend functionality adheres to standard REST API conventions.
+
+To ensure robustness and scalability, the system leverages Google Cloud Platform (GCP) services. AppEngine is used to deploy RESTful services, Cloud Storage for managing media (BLOB) files, and a database service for structured data storage. Additionally, Google Cloud Functions are employed for serverless computing tasks, such as periodic updates and maintenance functions. 
+
+The backend supports essential operations such as creating and updating patients, admissions, and medical progress, while also managing media uploads/downloads, patient questions and calculating waiting times.
+
+\end{multicols}
