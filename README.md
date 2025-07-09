@@ -1,4 +1,4 @@
-# Hospital Backend Project 1 - BDCC 24/25
+# Hospital Backend Project 1 - Big Data & Cloud Computing 24/25
 
 This project is a backend system for hospital data management, deployed on Google Cloud Platform (GCP). It leverages the **MIMIC-III** database and provides a REST API for managing hospital data, patient admissions, medical progress, media files, and patient-related questions.
 
